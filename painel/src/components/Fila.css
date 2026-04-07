@@ -1,0 +1,133 @@
+.fila {
+  width: 30%;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  overflow: hidden;
+}
+
+.fila-header {
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fila-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.fila-badge {
+  background: #667eea;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fila-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.fila-vazia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.fila-item {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 4px solid transparent;
+}
+
+.fila-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.fila-item.ativo {
+  border-color: #667eea;
+  background: #f0f4ff;
+  border-left-color: #667eea;
+}
+
+.fila-item.aguardando {
+  border-left-color: #fbbf24;
+}
+
+.fila-item.em_atendimento {
+  border-left-color: #60a5fa;
+}
+
+.fila-item.finalizado {
+  border-left-color: #4ade80;
+  opacity: 0.6;
+}
+
+.fila-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.fila-item-header strong {
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.status-label {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #f3f4f6;
+  color: #6b7280;
+  text-transform: capitalize;
+}
+
+.fila-item-body {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.origem-badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.fila-item-footer {
+  font-size: 11px;
+  color: #9ca3af;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .fila {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    max-height: 200px;
+  }
+}
