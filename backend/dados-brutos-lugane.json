@@ -1,0 +1,182 @@
+[
+  {
+    "data_hora": "2026-04-10 09:15",
+    "cliente": "Construtora ABC",
+    "equipamento": "Relógio iDClass",
+    "problema": "Não liga",
+    "tempo_resposta_min": 45,
+    "resolvido": "Sim",
+    "categoria": "Hardware"
+  },
+  {
+    "data_hora": "2026-04-10 10:30",
+    "cliente": "Clínica Saúde Smile",
+    "equipamento": "Software iDCloud",
+    "problema": "Não consigo exportar AFDT",
+    "tempo_resposta_min": 60,
+    "resolvido": "Sim",
+    "categoria": "Software"
+  },
+  {
+    "data_hora": "2026-04-10 11:45",
+    "cliente": "Comércio Loja X",
+    "equipamento": "Catraca iDBlock",
+    "problema": "Catraca travada",
+    "tempo_resposta_min": 30,
+    "resolvido": "Sim",
+    "categoria": "Hardware"
+  },
+  {
+    "data_hora": "2026-04-10 13:20",
+    "cliente": "Indústria Metal REC",
+    "equipamento": "Controlador iDFlex",
+    "problema": "Biometria não reconhece",
+    "tempo_resposta_min": 55,
+    "resolvido": "Sim",
+    "categoria": "Hardware"
+  },
+  {
+    "data_hora": "2026-04-10 14:50",
+    "cliente": "Escritório Advocacia Silva",
+    "equipamento": "Relógio iDClass",
+    "problema": "Como configurar troca de turno",
+    "tempo_resposta_min": 20,
+    "resolvido": "Sim",
+    "categoria": "Configuração"
+  },
+  {
+    "data_hora": "2026-04-11 08:30",
+    "cliente": "Hospital São João",
+    "equipamento": "Software iDCloud",
+    "problema": "Relatório de ponto em branco",
+    "tempo_resposta_min": 75,
+    "resolvido": "Não",
+    "categoria": "Software"
+  },
+  {
+    "data_hora": "2026-04-11 09:45",
+    "cliente": "Supermercado XYZ",
+    "equipamento": "Relógio iDClass",
+    "problema": "Travado, retorna erro de sincronização",
+    "tempo_resposta_min": 50,
+    "resolvido": "Sim",
+    "categoria": "Software/Hardware"
+  },
+  {
+    "data_hora": "2026-04-11 11:00",
+    "cliente": "TI Consultoria",
+    "equipamento": "Controlador iDFlex",
+    "problema": "Display LED não mostra informações",
+    "tempo_resposta_min": 65,
+    "resolvido": "Sim",
+    "categoria": "Hardware"
+  },
+  {
+    "data_hora": "2026-04-11 14:20",
+    "cliente": "Logística Frota Brasil",
+    "equipamento": "Catraca iDBlock",
+    "problema": "Rotação com barulho estranho",
+    "tempo_resposta_min": 40,
+    "resolvido": "Sim",
+    "categoria": "Manutenção"
+  },
+  {
+    "data_hora": "2026-04-11 15:30",
+    "cliente": "Banco do Brasil (agência)",
+    "equipamento": "Software iDCloud",
+    "problema": "Firewall bloqueando sincronização com servidor",
+    "tempo_resposta_min": 85,
+    "resolvido": "Sim",
+    "categoria": "Rede"
+  },
+  {
+    "data_hora": "2026-04-12 08:00",
+    "cliente": "Universidade Federal",
+    "equipamento": "Relógio iDClass",
+    "problema": "Sem energia, tela apagada",
+    "tempo_resposta_min": 35,
+    "resolvido": "Sim",
+    "categoria": "Hardware"
+  },
+  {
+    "data_hora": "2026-04-12 09:30",
+    "cliente": "Fábrica de Plásticos",
+    "equipamento": "Controlador iDFlex",
+    "problema": "Como adicionar novo usuário",
+    "tempo_resposta_min": 15,
+    "resolvido": "Sim",
+    "categoria": "Configuração"
+  },
+  {
+    "data_hora": "2026-04-12 11:00",
+    "cliente": "Farmácia Popular",
+    "equipamento": "Software iDCloud",
+    "problema": "Não consegue sincronizar com servidor",
+    "tempo_resposta_min": 70,
+    "resolvido": "Sim",
+    "categoria": "Rede"
+  },
+  {
+    "data_hora": "2026-04-12 13:45",
+    "cliente": "Restaurante Sabor do Rei",
+    "equipamento": "Catraca iDBlock",
+    "problema": "Não abre, barreira travada",
+    "tempo_resposta_min": 45,
+    "resolvido": "Sim",
+    "categoria": "Hardware"
+  },
+  {
+    "data_hora": "2026-04-12 16:00",
+    "cliente": "Escola Infantil Criança Feliz",
+    "equipamento": "Relógio iDClass",
+    "problema": "Qual é o procedimento de reset?",
+    "tempo_resposta_min": 25,
+    "resolvido": "Sim",
+    "categoria": "Configuração"
+  },
+  {
+    "data_hora": "2026-04-13 08:15",
+    "cliente": "Empresa de Eventos XYZ",
+    "equipamento": "Controlador iDFlex",
+    "problema": "Biometria retorna leitura incorreta",
+    "tempo_resposta_min": 55,
+    "resolvido": "Não",
+    "categoria": "Hardware"
+  },
+  {
+    "data_hora": "2026-04-13 10:00",
+    "cliente": "Clínica Odontológica Sorri",
+    "equipamento": "Software iDCloud",
+    "problema": "Como exportar dados de ponto em Excel",
+    "tempo_resposta_min": 30,
+    "resolvido": "Sim",
+    "categoria": "Software"
+  },
+  {
+    "data_hora": "2026-04-13 11:30",
+    "cliente": "Distribuidora de Bebidas Terra",
+    "equipamento": "Relógio iDClass",
+    "problema": "Sincronização falha com mensagem de erro",
+    "tempo_resposta_min": 65,
+    "resolvido": "Sim",
+    "categoria": "Software"
+  },
+  {
+    "data_hora": "2026-04-13 13:00",
+    "cliente": "Loja de Roupas Fashion Line",
+    "equipamento": "Catraca iDBlock",
+    "problema": "Limpeza recomendada para sensor",
+    "tempo_resposta_min": 10,
+    "resolvido": "Sim",
+    "categoria": "Manutenção"
+  },
+  {
+    "data_hora": "2026-04-13 15:20",
+    "cliente": "Fábrica de Alimentos Premium",
+    "equipamento": "Controlador iDFlex",
+    "problema": "Preciso substituir sensor biométrico",
+    "tempo_resposta_min": 90,
+    "resolvido": "Agendado",
+    "categoria": "Manutenção"
+  }
+]

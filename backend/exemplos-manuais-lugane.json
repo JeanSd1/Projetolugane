@@ -1,0 +1,110 @@
+[
+  {
+    "sistema": "iDClass",
+    "titulo": "Relógio iDClass não liga - Verificar fonte de energia",
+    "palavrasChave": "não liga, sem energia, desligado, não funciona, preto, escuro, tela apagada",
+    "link": "https://docs.lugane.com.br/idclass/energia"
+  },
+  {
+    "sistema": "iDClass",
+    "titulo": "Relógio iDClass - Como configurar troca de turno",
+    "palavrasChave": "turno, troca, configurar, horário, expediente, jornada",
+    "link": "https://docs.lugane.com.br/idclass/turno"
+  },
+  {
+    "sistema": "iDClass",
+    "titulo": "Relógio iDClass - O relógio está travado, como resetar",
+    "palavrasChave": "trava, travado, congelado, reset, reiniciar, restart",
+    "link": "https://docs.lugane.com.br/idclass/reset"
+  },
+  {
+    "sistema": "iDClass",
+    "titulo": "Relógio iDClass - Sincronização com software retorna erro",
+    "palavrasChave": "sincronizar, erro, sincronização, conexão, software, falha",
+    "link": "https://docs.lugane.com.br/idclass/sync"
+  },
+  {
+    "sistema": "iDFlex",
+    "titulo": "Controlador iDFlex - Biometria não reconhece digitais",
+    "palavrasChave": "biometria, dedo, digital, não reconhece, não identifica, leitura",
+    "link": "https://docs.lugane.com.br/idflex/biometria"
+  },
+  {
+    "sistema": "iDFlex",
+    "titulo": "Controlador iDFlex - Como adicionar novo usuário",
+    "palavrasChave": "adicionar, novo, usuário, cadastro, registrar, funcionário",
+    "link": "https://docs.lugane.com.br/idflex/usuarios"
+  },
+  {
+    "sistema": "iDFlex",
+    "titulo": "Controlador iDFlex - Travado o display LED",
+    "palavrasChave": "display, tela, led, trava, problema, mostrador",
+    "link": "https://docs.lugane.com.br/idflex/display"
+  },
+  {
+    "sistema": "iDBlock",
+    "titulo": "Catraca iDBlock - Catraca travada ou não abre",
+    "palavrasChave": "catraca, trava, não abre, travada, barreira, giratória",
+    "link": "https://docs.lugane.com.br/idblock/trava"
+  },
+  {
+    "sistema": "iDBlock",
+    "titulo": "Catraca iDBlock - Rotação irregular ou com barulho",
+    "palavrasChave": "som, barulho, rotação, irregular, estranha, ruído, problema",
+    "link": "https://docs.lugane.com.br/idblock/rotacao"
+  },
+  {
+    "sistema": "Software iDCloud",
+    "titulo": "Software iDCloud - Como exportar arquivo AFDT",
+    "palavrasChave": "exportar, afdt, arquivo, esocial, export, salvar",
+    "link": "https://docs.lugane.com.br/idcloud/afdt"
+  },
+  {
+    "sistema": "Software iDCloud",
+    "titulo": "Software iDCloud - Não consegue sincronizar com o servidor",
+    "palavrasChave": "sincronizar, servidor, conexão, erro, não conecta, offline",
+    "link": "https://docs.lugane.com.br/idcloud/servidor"
+  },
+  {
+    "sistema": "Software iDCloud",
+    "titulo": "Software iDCloud - Relatório de ponto em branco",
+    "palavrasChave": "relatório, ponto, em branco, vazio, não mostra, dados",
+    "link": "https://docs.lugane.com.br/idcloud/relatorio"
+  },
+  {
+    "sistema": "Rede",
+    "titulo": "Problema de conectividade com servidor - Verificar IP",
+    "palavrasChave": "conexão, rede, ip, online, offline, internet, lento",
+    "link": "https://docs.lugane.com.br/rede/conectividade"
+  },
+  {
+    "sistema": "Rede",
+    "titulo": "Firewall bloqueando comunicação - Portas necessárias",
+    "palavrasChave": "firewall, porta, bloqueado, liberado, acesso, bloqueio",
+    "link": "https://docs.lugane.com.br/rede/firewall"
+  },
+  {
+    "sistema": "Manutenção",
+    "titulo": "Limpeza e manutenção preventiva de leitores",
+    "palavrasChave": "limpeza, manutenção, sensor, leitor, álcool, pano",
+    "link": "https://docs.lugane.com.br/manutencao/limpeza"
+  },
+  {
+    "sistema": "Manutenção",
+    "titulo": "Substituição de peças - Sensor biométrico danificado",
+    "palavrasChave": "substituir, peça, danificado, quebrado, sensor, troca",
+    "link": "https://docs.lugane.com.br/manutencao/pecas"
+  },
+  {
+    "sistema": "Suporte Geral",
+    "titulo": "Como solicitar suporte técnico - Canais de atendimento",
+    "palavrasChave": "suporte, ajuda, contato, telefone, whatsapp, email",
+    "link": "https://docs.lugane.com.br/suporte/contato"
+  },
+  {
+    "sistema": "Suporte Geral",
+    "titulo": "Garantia e cobertura de assistência técnica",
+    "palavrasChave": "garantia, cobertura, assistência, serviço, técnico, período",
+    "link": "https://docs.lugane.com.br/suporte/garantia"
+  }
+]

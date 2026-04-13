@@ -1,0 +1,31 @@
+Data,Hora_Msg,Cliente,Telefone,Sistema,Problema,Hora_Resposta,Tempo_Espera_min,Status,Atendente
+10/04,08:15,Construtora ABC,51991234567,iDClass,Relógio não liga,08:52,37,Resolvido,João Silva
+10/04,09:03,Clínica XYZ,51991234568,iDCloud,Não consigo exportar AFDT,09:48,45,Resolvido,Maria Santos
+10/04,09:22,Loja DEF,51991234569,iDBlock,Catraca travada,10:15,53,Resolvido,João Silva
+10/04,10:05,Indústria GHI,51991234570,iDFlex,Biometria não reconhece,10:07,2,Resolvido,Pedro Costa
+10/04,11:30,Escritório JKL,51991234571,LVR-1959,Como configurar troca de turno,11:31,1,Resolvido,Maria Santos
+10/04,12:15,Hospital MNO,51991234572,iDCloud,Erro na sincronização,13:10,55,Resolvido,João Silva
+10/04,13:45,Varejo PQR,51991234573,iDClass,Bateria fraca,14:20,35,Resolvido,Pedro Costa
+10/04,14:20,Banco STU,51991234574,iDFlex,Não reconhece cartão,15:05,45,Resolvido,Maria Santos
+10/04,15:00,Escola VWX,51991234575,iDBlock,Catraca aberta não fecha,15:30,30,Resolvido,João Silva
+10/04,15:45,Supermercado YZA,51991234576,iDClass,Está desligando sozinho,16:40,55,Resolvido,Pedro Costa
+11/04,08:00,Fábrica BCD,51991234577,iDFlex,Erro 404 no painel,08:45,45,Resolvido,Maria Santos
+11/04,08:30,Consultório EFG,51991234578,LVR-1959,Esqueci a senha,08:31,1,Resolvido,João Silva
+11/04,09:15,Transportadora HIJ,51991234579,iDCloud,Software congela,10:30,75,Resolvido,Pedro Costa
+11/04,10:00,Editora KLM,51991234580,iDClass,Cadastrar funcionário falha,11:15,75,Resolvido,Maria Santos
+11/04,11:00,Segurança NOP,51991234581,iDBlock,Cartão não lê,11:05,5,Resolvido,João Silva
+11/04,12:30,RH ABC,51991234582,iDCloud,Exportar para eSocial não funciona,14:00,90,Resolvido,Pedro Costa
+11/04,13:15,Comercial QRS,51991234583,iDClass,Não liga de manhã,14:45,90,Resolvido,Maria Santos
+11/04,14:00,Financeiro TUV,51991234584,iDFlex,Modo offline não sincroniza,14:30,30,Resolvido,João Silva
+11/04,15:30,Logística WXY,51991234585,iDBlock,Catraca com som estranho,16:00,30,Resolvido,Pedro Costa
+11/04,16:45,TI ZAB,51991234586,LVR-1959,Resetar dispositivo,16:50,5,Resolvido,Maria Santos
+12/04,08:00,Vendas CDE,51991234587,iDClass,Relógio marca horário errado,09:30,90,Resolvido,João Silva
+12/04,08:45,Operações FGH,51991234588,iDCloud,Dashboard lento,09:15,30,Resolvido,Pedro Costa
+12/04,09:30,Atendimento IJK,51991234589,iDBlock,Girador da catraca preso,10:00,30,Resolvido,Maria Santos
+12/04,10:15,Administração LMN,51991234590,iDFlex,Licença expirada,10:20,5,Resolvido,João Silva
+12/04,11:00,Planejamento OPQ,51991234591,iDClass,Não gera relatório,12:30,90,Resolvido,Pedro Costa
+12/04,12:00,Suporte RST,51991234592,LVR-1959,Como acessar histórico,12:10,10,Resolvido,Maria Santos
+12/04,13:30,Diretoria UVW,51991234593,iDCloud,Não sincroniza com nuvem,15:00,90,Resolvido,João Silva
+12/04,14:15,Gerência XYZ,51991234594,iDBlock,Luz LED não funciona,14:45,30,Resolvido,Pedro Costa
+12/04,15:00,Coordenação ABC,51991234595,iDClass,Erro de comunicação USB,16:00,60,Resolvido,Maria Santos
+12/04,16:00,Desenvolvimento DEF,51991234596,iDFlex,API não responde,16:05,5,Resolvido,João Silva

@@ -1,0 +1,74 @@
+[
+  {
+    "sistema": "RHID",
+    "titulo": "Como resetar senha no RHID",
+    "palavrasChave": "senha, acesso, login, esquecer, reset, trocar, redefinir",
+    "link": "https://docs.example.com/rhid/resetar-senha"
+  },
+  {
+    "sistema": "RHID",
+    "titulo": "Erro ao sincronizar folha de ponto",
+    "palavrasChave": "sincronizar, erro, folha, ponto, expediente, relatório",
+    "link": "https://docs.example.com/rhid/sincronizar"
+  },
+  {
+    "sistema": "RHID",
+    "titulo": "Consultar saldo de férias",
+    "palavrasChave": "férias, saldo, dias, consultar, afastamento",
+    "link": "https://docs.example.com/rhid/ferias"
+  },
+  {
+    "sistema": "PTRP",
+    "titulo": "Emitir recibos de pagamento",
+    "palavrasChave": "recibo, pagamento, rp, documento, emissão",
+    "link": "https://docs.example.com/ptrp/recibos"
+  },
+  {
+    "sistema": "PTRP",
+    "titulo": "Consultar histórico de pagamentos",
+    "palavrasChave": "histórico, pagamento, consultar, extrato, período",
+    "link": "https://docs.example.com/ptrp/historico"
+  },
+  {
+    "sistema": "PTRP",
+    "titulo": "Problema com desconto indevido",
+    "palavrasChave": "desconto, erro, dedução, cálculo, folha",
+    "link": "https://docs.example.com/ptrp/descontos"
+  },
+  {
+    "sistema": "DMA",
+    "titulo": "Registrar nova despesa",
+    "palavrasChave": "despesa, registro, novo, adicionar, gastos",
+    "link": "https://docs.example.com/dma/nova-despesa"
+  },
+  {
+    "sistema": "DMA",
+    "titulo": "Aprovar solicitação de reembolso",
+    "palavrasChave": "reembolso, aprovar, autorizar, solicitação, despesa",
+    "link": "https://docs.example.com/dma/reembolso"
+  },
+  {
+    "sistema": "DMA",
+    "titulo": "Gerar relatório de despesas por departamento",
+    "palavrasChave": "relatório, despesa, departamento, analise, dados",
+    "link": "https://docs.example.com/dma/relatorio"
+  },
+  {
+    "sistema": "COMUM",
+    "titulo": "Problemas de conectividade",
+    "palavrasChave": "internet, conexão, rede, offline, lento, problema",
+    "link": "https://docs.example.com/comum/conectividade"
+  },
+  {
+    "sistema": "COMUM",
+    "titulo": "Restaurar backup de dados",
+    "palavrasChave": "backup, restaurar, recuperar, dados, perdido",
+    "link": "https://docs.example.com/comum/backup"
+  },
+  {
+    "sistema": "COMUM",
+    "titulo": "Atualizar navegador web",
+    "palavrasChave": "navegador, atualizar, versão, chrome, firefox, edge",
+    "link": "https://docs.example.com/comum/navegador"
+  }
+]
