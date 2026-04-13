@@ -4,7 +4,7 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 
-const { chamados, atendentes } = require("./dados");
+const { chamados, atendentes, manuais, conversasLiberadas } = require("./dados");
 
 const app = express();
 app.use(cors());
@@ -15,17 +15,59 @@ const io = new Server(server, {
   cors: { origin: "*" }
 });
 
+function normalizarTexto(texto = "") {
+  return texto
+    .toString()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function pontuarCorrespondencia(buscaNormalizada, secao) {
+  const tokens = buscaNormalizada.split(/\s+/).filter(Boolean);
+  const indice = `${secao.sistema} ${secao.etiqueta} ${secao.titulo} ${secao.descricao}`.toLowerCase();
+
+  return tokens.reduce((score, token) => {
+    if (indice.includes(token)) return score + 1;
+    return score;
+  }, 0);
+}
+
+function obterConfigPublicAI() {
+  return {
+    apiKey: process.env.PUBLICAI_API_KEY || "",
+    endpoint: process.env.PUBLICAI_API_URL || "https://api.publicai.co"
+  };
+}
+
+function textoEhOi(texto = "") {
+  return normalizarTexto(texto) === "oi";
+}
+
+function podeResponderWhatsapp(telefone, textoRecebido) {
+  const contato = normalizarTexto(telefone);
+  const recebeuOiAgora = textoEhOi(textoRecebido);
+
+  if (recebeuOiAgora) {
+    conversasLiberadas.add(contato);
+    return true;
+  }
+
+  return conversasLiberadas.has(contato);
+}
 
 // ==========================
 // 📌 CRIAR CHAMADO
 // ==========================
 app.post("/chamado", (req, res) => {
-  const { nome, telefone, sistema, origem } = req.body;
+  const { nome, telefone, sistema, origem, etiqueta } = req.body;
 
   const novo = {
     id: uuidv4(),
     cliente: { nome, telefone },
     sistema,
+    etiqueta: etiqueta || null,
     origem, // whatsapp ou web
     status: "aguardando",
     atendenteId: null,
@@ -44,6 +86,132 @@ app.post("/chamado", (req, res) => {
   distribuir();
 
   res.json(novo);
+});
+
+// ==========================
+// 📘 MANUAIS (BASE DE CONHECIMENTO)
+// ==========================
+app.post("/manuais/secao", (req, res) => {
+  const { sistema, etiqueta, titulo, descricao, link } = req.body;
+
+  if (!sistema || !etiqueta || !titulo || !link) {
+    return res.status(400).json({
+      erro: "Campos obrigatórios: sistema, etiqueta, titulo, link"
+    });
+  }
+
+  const secao = {
+    id: uuidv4(),
+    sistema: normalizarTexto(sistema),
+    etiqueta: normalizarTexto(etiqueta),
+    titulo,
+    descricao: descricao || "",
+    link
+  };
+
+  manuais.push(secao);
+  return res.status(201).json(secao);
+});
+
+app.get("/manuais/secao", (_req, res) => {
+  return res.json(manuais);
+});
+
+app.post("/manuais/sugerir", (req, res) => {
+  const { sistema, etiqueta, texto } = req.body;
+  const sistemaNormalizado = normalizarTexto(sistema);
+  const etiquetaNormalizada = normalizarTexto(etiqueta);
+  const textoNormalizado = normalizarTexto(texto);
+
+  if (!sistemaNormalizado || (!etiquetaNormalizada && !textoNormalizado)) {
+    return res.status(400).json({
+      erro: "Informe sistema e ao menos um entre etiqueta ou texto"
+    });
+  }
+
+  const candidatos = manuais
+    .filter((secao) => secao.sistema === sistemaNormalizado)
+    .map((secao) => {
+      let score = 0;
+
+      if (etiquetaNormalizada && secao.etiqueta.includes(etiquetaNormalizada)) {
+        score += 5;
+      }
+
+      if (textoNormalizado) {
+        score += pontuarCorrespondencia(textoNormalizado, secao);
+      }
+
+      return { ...secao, score };
+    })
+    .filter((secao) => secao.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5);
+
+  return res.json({
+    sistema: sistemaNormalizado,
+    totalSugestoes: candidatos.length,
+    sugestoes: candidatos
+  });
+});
+
+// ==========================
+// 🤖 INTEGRAÇÃO PUBLICAI
+// ==========================
+app.get("/integracoes/publicai/status", (_req, res) => {
+  const config = obterConfigPublicAI();
+  return res.json({
+    configurado: Boolean(config.apiKey),
+    endpoint: config.endpoint,
+    regraDisparo: "só responde depois de receber 'oi'",
+    postarStatusWhatsapp: false
+  });
+});
+
+app.post("/integracoes/publicai/responder", (req, res) => {
+  const { telefone, textoRecebido, sistema, etiqueta } = req.body;
+  const config = obterConfigPublicAI();
+
+  if (!config.apiKey) {
+    return res.status(400).json({
+      erro: "PUBLICAI_API_KEY não configurada no ambiente do backend"
+    });
+  }
+
+  if (!telefone || !textoRecebido) {
+    return res.status(400).json({
+      erro: "Campos obrigatórios: telefone, textoRecebido"
+    });
+  }
+
+  if (!podeResponderWhatsapp(telefone, textoRecebido)) {
+    return res.status(403).json({
+      bloqueado: true,
+      motivo: "Aguardando mensagem inicial 'oi' do cliente antes de qualquer resposta"
+    });
+  }
+
+  const sistemaNormalizado = normalizarTexto(sistema);
+  const etiquetaNormalizada = normalizarTexto(etiqueta);
+  const textoNormalizado = normalizarTexto(textoRecebido);
+
+  const sugestoes = manuais
+    .filter((secao) => !sistemaNormalizado || secao.sistema === sistemaNormalizado)
+    .map((secao) => {
+      let score = 0;
+      if (etiquetaNormalizada && secao.etiqueta.includes(etiquetaNormalizada)) score += 5;
+      score += pontuarCorrespondencia(textoNormalizado, secao);
+      return { ...secao, score };
+    })
+    .filter((secao) => secao.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+
+  return res.json({
+    respostaAutomaticaHabilitada: true,
+    postarStatusWhatsapp: false,
+    sugestoes
+  });
 });
 
 
