@@ -29,6 +29,16 @@ cd backend && npm install && cd ..
 cd painel && npm install && cd ..
 ```
 
+### 1.1 Configurar API Key da PublicAI (backend)
+No terminal onde vai iniciar o backend, defina as variáveis de ambiente:
+
+```bash
+export PUBLICAI_API_KEY="SUA_CHAVE_AQUI"
+export PUBLICAI_API_URL="https://api.publicai.co" # opcional
+```
+
+> ⚠️ Nunca commitar a chave no Git. Se você já compartilhou a chave publicamente, gere outra no painel da PublicAI.
+
 ### 2. Rodar Backend (Terminal 1)
 ```bash
 cd backend && npm start
@@ -75,6 +85,51 @@ curl -X POST http://localhost:3000/finalizar \
 curl http://localhost:3000/metricas
 ```
 
+### POST `/manuais/secao` - Cadastrar seção de manual
+```bash
+curl -X POST http://localhost:3000/manuais/secao \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sistema": "RHD",
+    "etiqueta": "banco de horas",
+    "titulo": "Aba de banco de horas",
+    "descricao": "Configuração e consulta de banco de horas",
+    "link": "https://manual.exemplo.com/rhd/banco-de-horas"
+  }'
+```
+
+### POST `/manuais/sugerir` - Buscar seção ideal do manual
+```bash
+curl -X POST http://localhost:3000/manuais/sugerir \
+  -H "Content-Type: application/json" \
+  -d '{
+    "sistema": "RHD",
+    "etiqueta": "banco de horas",
+    "texto": "como consultar saldo e fechamento"
+  }'
+```
+
+### GET `/integracoes/publicai/status` - Verificar integração PublicAI
+```bash
+curl http://localhost:3000/integracoes/publicai/status
+```
+
+### POST `/integracoes/publicai/responder` - Resposta segura (somente após "oi")
+```bash
+curl -X POST http://localhost:3000/integracoes/publicai/responder \
+  -H "Content-Type: application/json" \
+  -d '{
+    "telefone": "51999999999",
+    "textoRecebido": "oi",
+    "sistema": "RHD",
+    "etiqueta": "banco de horas"
+  }'
+```
+
+Regras de segurança implementadas:
+- O sistema **não responde** até receber `oi` do cliente.
+- O sistema **não posta status** no WhatsApp.
+
 ## 🧪 Teste Completo
 
 1. Criar um chamado (curl acima)
@@ -90,6 +145,8 @@ curl http://localhost:3000/metricas
 ✅ Chat com Socket.io
 ✅ Distribuição automática
 ✅ Métricas
+✅ Sugestão de manual por etiqueta/texto
+✅ Regra anti-spam: só responde após "oi"
 ✅ Interface Zendesk-like
 ✅ Design responsivo
 
