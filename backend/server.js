@@ -60,33 +60,7 @@ function podeResponderWhatsapp(telefone, textoRecebido) {
 // ==========================
 // 📌 CRIAR CHAMADO
 // ==========================
-<<<<<<< HEAD
-app.post("/chamado", async (req, res) => {
-  try {
-    const { nome, telefone, sistema, origem } = req.body;
-
-    const novo = {
-      id: uuidv4(),
-      cliente: { nome, telefone },
-      sistema,
-      origem,
-      status: "aguardando",
-      atendenteId: null,
-      mensagens: []
-    };
-=======
-app.post("/chamado", (req, res) => {
-  const { nome, telefone, sistema, origem, etiqueta } = req.body;
-
-  const novo = {
-    id: uuidv4(),
-    cliente: { nome, telefone },
-    sistema,
-    etiqueta: etiqueta || null,
-    origem, // whatsapp ou web
-    status: "aguardando",
-    atendenteId: null,
->>>>>>> 4bfabf724fcc86a1ebde24e5e7f4fe69d629338b
+app.post("/chamado", async (req, res) => {     try {         const { nome, telefone, sistema, origem, etiqueta } = req.body;          const novo = {             id: uuidv4(),             cliente: { nome, telefone },             sistema,             etiqueta: etiqueta || null,             origem,             status: "aguardando",             atendenteId: null,             mensagens: []         };          await db.criarChamado(novo);         const chamados = await db.obterChamados();         io.emit("fila", chamados);         await distribuir();         res.json(novo);     } catch (err) {         console.error("Erro ao criar chamado:", err);         res.status(500).json({ erro: "Erro ao criar chamado" });     } });
 
     await db.criarChamado(novo);
 
