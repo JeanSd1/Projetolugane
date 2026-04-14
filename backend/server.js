@@ -459,6 +459,6 @@ io.on("connection", (socket) => {
 });
 
 
-server.listen(3001, () => {
-  console.log("🚀 Backend rodando na porta 3001");
+server.listen(process.env.PORT || 3001, () => {
+  console.log("🚀 Backend rodando na porta " + (process.env.PORT || 3001));
 });
