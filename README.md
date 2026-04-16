@@ -25,7 +25,7 @@ Sistema completo de gerenciamento de fila de chamados com chat em tempo real, m�
 
 ### 1. Instalar Dependências
 ```bash
-cd backend && npm install && cd ..
+npm install
 cd painel && npm install && cd ..
 ```
 
@@ -41,8 +41,10 @@ export PUBLICAI_API_URL="https://api.publicai.co" # opcional
 
 ### 2. Rodar Backend (Terminal 1)
 ```bash
-cd backend && npm start
+npm start
 ```
+
+> O backend roda por padrão na porta `3001` (ou na porta definida em `PORT`).
 
 ### 3. Rodar Painel (Terminal 2)
 ```bash
