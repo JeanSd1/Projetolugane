@@ -166,6 +166,5 @@ Regras de segurança implementadas:
 - [ ] Autenticação
 - [ ] Notificações
 
----
 
-**Desenvolvido com ❤️**
+
