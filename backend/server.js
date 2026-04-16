@@ -4,6 +4,7 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 const db = require("./database");
+const { manuais, conversasLiberadas } = require("./dados");
 
 const app = express();
 app.use(cors());

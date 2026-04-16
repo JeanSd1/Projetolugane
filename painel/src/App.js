@@ -8,7 +8,8 @@ import Fila from "./components/Fila";
 import Chat from "./components/Chat";
 import Metricas from "./components/Metricas";
 
-const socket = io("http://localhost:3001");
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+const socket = io(API_BASE_URL);
 
 function App() {
   const [fila, setFila] = useState([]);
@@ -33,13 +34,13 @@ function App() {
     });
 
     // Marcar atendente como disponível
-    axios.post("http://localhost:3001/atendente/disponivel", {
+    axios.post(`${API_BASE_URL}/atendente/disponivel`, {
       atendenteId
     }).catch(err => console.error("Erro ao conectar:", err));
 
     // Buscar métricas periodicamente
     const interval = setInterval(() => {
-      axios.get("http://localhost:3001/metricas")
+      axios.get(`${API_BASE_URL}/metricas`)
         .then(res => setMetricas(res.data))
         .catch(err => console.error("Erro ao buscar métricas:", err));
     }, 5000);
@@ -69,7 +70,7 @@ function App() {
     
     setLoading(true);
     try {
-      await axios.post("http://localhost:3000/finalizar", {
+      await axios.post(`${API_BASE_URL}/finalizar`, {
         chamadoId: chamadoAtual.id,
         atendenteId
       });

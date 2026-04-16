@@ -9,3 +9,11 @@ build/
 *.log
 .next/
 out/
+
+# Python virtual environments
+venv/
+.venv/
+env/
+
+# whatsapp-web.js cache
+.wwebjs_cache/
