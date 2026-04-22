@@ -205,10 +205,45 @@ app.post("/finalizar", async (req, res) => {
 app.get("/metricas", async (req, res) => {
   try {
     const chamados = await db.obterChamados();
-    const finalizados = chamados.filter(c => c.status === "finalizado");
-    const emAtendimento = chamados.filter(c => c.status === "em_atendimento");
-    const aguardando = chamados.filter(c => c.status === "aguardando");
-    res.json({ totalChamados: chamados.length, finalizados: finalizados.length, emAtendimento: emAtendimento.length, aguardando: aguardando.length });
+    const finalizados = chamados.filter((c) => c.status === "finalizado");
+    const emAtendimento = chamados.filter((c) => c.status === "em_atendimento");
+    const aguardando = chamados.filter((c) => c.status === "aguardando");
+
+    const paraMs = (inicio, fim) => {
+      if (!inicio || !fim) return 0;
+      const ini = new Date(inicio).getTime();
+      const end = new Date(fim).getTime();
+      if (!Number.isFinite(ini) || !Number.isFinite(end) || end < ini) return 0;
+      return end - ini;
+    };
+
+    const temposAtendimento = finalizados
+      .map((c) => paraMs(c.iniciado_em, c.finalizado_em))
+      .filter((tempo) => tempo > 0);
+
+    const temposEspera = chamados
+      .map((c) => paraMs(c.criado_em, c.iniciado_em || c.finalizado_em))
+      .filter((tempo) => tempo > 0);
+
+    const media = (valores) => {
+      if (!valores.length) return 0;
+      return valores.reduce((acc, v) => acc + v, 0) / valores.length;
+    };
+
+    const totalChamados = chamados.length;
+    const taxaResolucao = totalChamados > 0 ? (finalizados.length / totalChamados) * 100 : 0;
+    const eficienciaOperacional = Math.max(0, Math.min(100, 100 - (aguardando.length * 5)));
+
+    res.json({
+      totalChamados,
+      finalizados: finalizados.length,
+      emAtendimento: emAtendimento.length,
+      aguardando: aguardando.length,
+      tempoMedio: media(temposAtendimento),
+      tempoEsperaMedio: media(temposEspera),
+      taxaResolucao,
+      eficienciaOperacional
+    });
   } catch (err) {
     console.error("Erro ao buscar métricas:", err);
     res.status(500).json({ erro: "Erro ao buscar métricas" });
