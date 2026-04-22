@@ -3,6 +3,14 @@ import "./Metricas.css";
 export default function Metricas({ metricas }) {
   if (!metricas) return null;
 
+  const tempoMedioMin = Number.isFinite(metricas.tempoMedio)
+    ? (metricas.tempoMedio / 1000 / 60).toFixed(1)
+    : "0.0";
+
+  const tempoEsperaMedioMin = Number.isFinite(metricas.tempoEsperaMedio)
+    ? (metricas.tempoEsperaMedio / 1000 / 60).toFixed(1)
+    : "0.0";
+
   return (
     <div className="metricas">
       <div className="metrica-item">
@@ -33,14 +41,14 @@ export default function Metricas({ metricas }) {
 
       <div className="metrica-item">
         <div className="metrica-value">
-          {(metricas.tempoMedio / 1000 / 60).toFixed(1)}m
+          {tempoMedioMin}m
         </div>
         <div className="metrica-label">Tempo Médio</div>
       </div>
 
       <div className="metrica-item">
         <div className="metrica-value">
-          {(metricas.tempoEsperaMedio / 1000 / 60).toFixed(1)}m
+          {tempoEsperaMedioMin}m
         </div>
         <div className="metrica-label">Tempo Espera</div>
       </div>

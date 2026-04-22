@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Fila from "./components/Fila";
 import Chat from "./components/Chat";
 import Metricas from "./components/Metricas";
+import PainelAnalitico from "./components/PainelAnalitico";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
 const socket = io(API_BASE_URL);
@@ -87,6 +88,7 @@ function App() {
     <div className="app">
       <Header />
       <Metricas metricas={metricas} />
+      <PainelAnalitico metricas={metricas} />
 
       <div className="container">
         <Fila 
