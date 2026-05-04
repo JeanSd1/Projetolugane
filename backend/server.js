@@ -3,16 +3,31 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
+const path = require("path");
 
 const db = require("./database");
+const { gerarRelatorioPDF, pdfDir } = require("./gerar-pdf");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Servir arquivos PDF
+app.use("/relatorios-pdf", express.static(pdfDir));
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: "*" }
+});
+
+// Emitir fila atual quando um cliente se conecta
+io.on("connection", async (socket) => {
+  try {
+    const chamados = await db.obterChamados();
+    socket.emit("fila", chamados);
+  } catch (err) {
+    console.error("Erro ao enviar fila inicial:", err);
+  }
 });
 
 function normalizarTexto(texto = "") {
@@ -60,33 +75,20 @@ function podeResponderWhatsapp(telefone, textoRecebido) {
 // ==========================
 // 📌 CRIAR CHAMADO
 // ==========================
-<<<<<<< HEAD
 app.post("/chamado", async (req, res) => {
   try {
-    const { nome, telefone, sistema, origem } = req.body;
+    const { nome, telefone, sistema, origem, etiqueta } = req.body;
 
     const novo = {
       id: uuidv4(),
       cliente: { nome, telefone },
       sistema,
+      etiqueta: etiqueta || null,
       origem,
       status: "aguardando",
       atendenteId: null,
       mensagens: []
     };
-=======
-app.post("/chamado", (req, res) => {
-  const { nome, telefone, sistema, origem, etiqueta } = req.body;
-
-  const novo = {
-    id: uuidv4(),
-    cliente: { nome, telefone },
-    sistema,
-    etiqueta: etiqueta || null,
-    origem, // whatsapp ou web
-    status: "aguardando",
-    atendenteId: null,
->>>>>>> 4bfabf724fcc86a1ebde24e5e7f4fe69d629338b
 
     await db.criarChamado(novo);
 
@@ -167,6 +169,22 @@ app.post("/manuais/sugerir", (req, res) => {
     totalSugestoes: candidatos.length,
     sugestoes: candidatos
   });
+});
+
+// ==========================
+// 📌 FINALIZAR CHAMADO
+// ==========================
+app.put("/chamado/:id/finalizar", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await db.finalizarChamado(id);
+    const chamados = await db.obterChamados();
+    io.emit("fila", chamados);
+    res.json({ sucesso: true });
+  } catch (err) {
+    console.error("Erro ao finalizar chamado:", err);
+    res.status(500).json({ erro: "Erro ao finalizar chamado" });
+  }
 });
 
 // ==========================
@@ -253,6 +271,15 @@ app.post("/finalizar", async (req, res) => {
     const { chamadoId, atendenteId } = req.body;
 
     await db.atualizarStatusChamado(chamadoId, "finalizado");
+    
+    // Atualizar histórico do cliente
+    try {
+      await db.atualizarHistoricoAposFinalizacao(chamadoId);
+    } catch (err) {
+      console.error("⚠️ Erro ao atualizar histórico do cliente:", err);
+      // Não falha a finalização se o histórico não for atualizado
+    }
+
     await db.marcarAtendente(atendenteId, "livre");
 
     const chamados = await db.obterChamados();
@@ -400,8 +427,140 @@ app.delete("/manuais/:id", async (req, res) => {
 });
 
 
+// ==========================// 📊 HISTÓRICO DE CLIENTES
 // ==========================
-// �🔄 DISTRIBUIÇÃO AUTOMÁTICA
+
+// GET - Obter histórico de um cliente
+app.get("/historico/:telefone", async (req, res) => {
+  try {
+    const { telefone } = req.params;
+    const historico = await db.obterHistoricoCliente(telefone);
+    
+    if (!historico) {
+      return res.status(404).json({ erro: "Cliente não encontrado" });
+    }
+
+    res.json(historico);
+  } catch (err) {
+    console.error("Erro ao obter histórico:", err);
+    res.status(500).json({ erro: "Erro ao obter histórico" });
+  }
+});
+
+// GET - Listar todos os clientes com histórico
+app.get("/historico", async (req, res) => {
+  try {
+    const clientes = await db.obterTodosClientes();
+    res.json(clientes);
+  } catch (err) {
+    console.error("Erro ao listar clientes:", err);
+    res.status(500).json({ erro: "Erro ao listar clientes" });
+  }
+});
+
+// GET - Obter estatísticas de um mês específico
+app.get("/historico/:telefone/mes/:ano/:mes", async (req, res) => {
+  try {
+    const { telefone, ano, mes } = req.params;
+    const stats = await db.obterEstatisticasMes(telefone, parseInt(ano), parseInt(mes));
+    res.json(stats);
+  } catch (err) {
+    console.error("Erro ao obter estatísticas:", err);
+    res.status(500).json({ erro: "Erro ao obter estatísticas" });
+  }
+});
+
+// POST - Atualizar histórico após finalizar chamado
+app.post("/historico/atualizar/:chamadoId", async (req, res) => {
+  try {
+    const { chamadoId } = req.params;
+    const resultado = await db.atualizarHistoricoAposFinalizacao(chamadoId);
+    res.json(resultado);
+  } catch (err) {
+    console.error("Erro ao atualizar histórico:", err);
+    res.status(500).json({ erro: "Erro ao atualizar histórico" });
+  }
+});
+
+// POST - Gerar relatório PDF mensal
+app.post("/gerar-relatorio-pdf/:telefone/:ano/:mes", async (req, res) => {
+  try {
+    const { telefone, ano, mes } = req.params;
+
+    // Obter histórico do cliente
+    const historico = await db.obterHistoricoCliente(telefone);
+    if (!historico) {
+      return res.status(404).json({ erro: "Cliente não encontrado" });
+    }
+
+    // Obter estatísticas do mês
+    const estatisticasMes = await db.obterEstatisticasMes(
+      telefone,
+      parseInt(ano),
+      parseInt(mes)
+    );
+
+    // Gerar PDF
+    const resultado = await gerarRelatorioPDF(
+      historico,
+      estatisticasMes,
+      parseInt(ano),
+      parseInt(mes)
+    );
+
+    res.json({
+      sucesso: true,
+      mensagem: "Relatório PDF gerado com sucesso",
+      downloadUrl: resultado.url,
+      nomeArquivo: resultado.nomeArquivo
+    });
+  } catch (err) {
+    console.error("Erro ao gerar PDF:", err);
+    res.status(500).json({ erro: "Erro ao gerar relatório PDF" });
+  }
+});
+
+// GET - Fazer download do relatório PDF
+app.get("/download-relatorio/:telefone/:ano/:mes", async (req, res) => {
+  try {
+    const { telefone, ano, mes } = req.params;
+    const fs = require("fs");
+    const mesStr = String(mes).padStart(2, "0");
+    const anoStr = String(ano);
+    const nomeArquivo = `relatorio_${telefone}_${anoStr}-${mesStr}.pdf`;
+    const caminhoCompleto = path.join(pdfDir, nomeArquivo);
+
+    // Verificar se arquivo existe
+    if (!fs.existsSync(caminhoCompleto)) {
+      // Gerar em tempo real se não existir
+      const historico = await db.obterHistoricoCliente(telefone);
+      if (!historico) {
+        return res.status(404).json({ erro: "Cliente não encontrado" });
+      }
+
+      const estatisticasMes = await db.obterEstatisticasMes(
+        telefone,
+        parseInt(ano),
+        parseInt(mes)
+      );
+
+      await gerarRelatorioPDF(
+        historico,
+        estatisticasMes,
+        parseInt(ano),
+        parseInt(mes)
+      );
+    }
+
+    res.download(caminhoCompleto, nomeArquivo);
+  } catch (err) {
+    console.error("Erro ao fazer download:", err);
+    res.status(500).json({ erro: "Erro ao fazer download" });
+  }
+});
+
+
+// ==========================// �🔄 DISTRIBUIÇÃO AUTOMÁTICA
 // ==========================
 async function distribuir() {
   try {

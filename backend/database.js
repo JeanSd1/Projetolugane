@@ -69,6 +69,39 @@ function inicializarBanco() {
     )
   `);
 
+  // ==========================
+  // 📊 TABELA HISTÓRICO DE CLIENTES
+  // ==========================
+  db.run(`
+    CREATE TABLE IF NOT EXISTS historico_clientes (
+      id TEXT PRIMARY KEY,
+      telefone TEXT NOT NULL UNIQUE,
+      nome_cliente TEXT,
+      total_atendimentos INTEGER DEFAULT 0,
+      tempo_medio_atendimento REAL DEFAULT 0,
+      duvidas_frequentes TEXT,
+      atendimentos_mes INTEGER DEFAULT 0,
+      ultima_interacao DATETIME,
+      criado_em DATETIME DEFAULT CURRENT_TIMESTAMP,
+      atualizado_em DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // ==========================
+  // 📈 TABELA ESTATÍSTICAS DIÁRIAS
+  // ==========================
+  db.run(`
+    CREATE TABLE IF NOT EXISTS estatisticas_diarias (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      telefone TEXT NOT NULL,
+      data DATE NOT NULL,
+      total_atendimentos INTEGER DEFAULT 0,
+      tempo_total_minutos INTEGER DEFAULT 0,
+      FOREIGN KEY (telefone) REFERENCES historico_clientes(telefone),
+      UNIQUE(telefone, data)
+    )
+  `);
+
   console.log('✅ Tabelas criadas/verificadas com sucesso');
 }
 
@@ -134,6 +167,17 @@ function atualizarStatusChamado(chamadoId, status, atendenteId = null) {
     db.run(query, params, function(err) {
       if (err) reject(err);
       else resolve({ chamadoId, status });
+    });
+  });
+}
+
+// Finalizar chamado (atualiza status e timestamp)
+function finalizarChamado(chamadoId) {
+  return new Promise((resolve, reject) => {
+    const sql = `UPDATE chamados SET status = 'finalizado', finalizado_em = datetime('now') WHERE id = ?`;
+    db.run(sql, [chamadoId], function(err) {
+      if (err) reject(err);
+      else resolve({ chamadoId, status: 'finalizado' });
     });
   });
 }
@@ -284,6 +328,215 @@ function deletarManual(id) {
   });
 }
 
+// ==========================
+// 📊 FUNÇÕES DE HISTÓRICO DE CLIENTES
+// ==========================
+
+// Obter ou criar histórico de cliente
+function obterOuCriarHistoricoCliente(telefone, nomeCiente) {
+  return new Promise((resolve, reject) => {
+    // Primeiro tenta buscar o histórico existente
+    db.get(
+      `SELECT * FROM historico_clientes WHERE telefone = ?`,
+      [telefone],
+      (err, row) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        // Se já existe, retorna
+        if (row) {
+          resolve(row);
+          return;
+        }
+
+        // Se não existe, cria novo
+        const id = `HC_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        db.run(
+          `INSERT INTO historico_clientes (id, telefone, nome_cliente) VALUES (?, ?, ?)`,
+          [id, telefone, nomeCiente],
+          function(err) {
+            if (err) reject(err);
+            else {
+              resolve({
+                id,
+                telefone,
+                nome_cliente: nomeCiente,
+                total_atendimentos: 0,
+                tempo_medio_atendimento: 0,
+                duvidas_frequentes: '[]',
+                atendimentos_mes: 0,
+              });
+            }
+          }
+        );
+      }
+    );
+  });
+}
+
+// Obter histórico completo do cliente
+function obterHistoricoCliente(telefone) {
+  return new Promise((resolve, reject) => {
+    db.get(
+      `SELECT * FROM historico_clientes WHERE telefone = ?`,
+      [telefone],
+      (err, row) => {
+        if (err) reject(err);
+        else {
+          if (row && row.duvidas_frequentes) {
+            row.duvidas_frequentes = JSON.parse(row.duvidas_frequentes);
+          }
+          resolve(row);
+        }
+      }
+    );
+  });
+}
+
+// Atualizar histórico após finalizar chamado
+function atualizarHistoricoAposFinalizacao(chamadoId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Busca dados do chamado
+      const chamado = await obterChamadoPorId(chamadoId);
+      if (!chamado) {
+        reject(new Error('Chamado não encontrado'));
+        return;
+      }
+
+      // Busca ou cria histórico
+      const historico = await obterOuCriarHistoricoCliente(
+        chamado.telefone,
+        chamado.nome_cliente
+      );
+
+      // Calcula tempo de atendimento em minutos
+      const tempoAtendimento = chamado.finalizado_em && chamado.iniciado_em
+        ? Math.round(
+            (new Date(chamado.finalizado_em) - new Date(chamado.iniciado_em)) / 60000
+          )
+        : 0;
+
+      // Busca mensagens do chamado para extrair dúvidas frequentes
+      const mensagens = await obterMensagens(chamadoId);
+      const textosCliente = mensagens
+        .filter((m) => m.de === 'cliente')
+        .map((m) => m.texto.toLowerCase());
+
+      // Atualiza dúvidas frequentes
+      let duvidasFrequentes = [];
+      try {
+        duvidasFrequentes = JSON.parse(historico.duvidas_frequentes || '[]');
+      } catch (e) {
+        duvidasFrequentes = [];
+      }
+
+      // Adiciona novas dúvidas
+      textosCliente.forEach((texto) => {
+        const duvida = duvidasFrequentes.find((d) => d.texto === texto);
+        if (duvida) {
+          duvida.frequencia += 1;
+        } else {
+          duvidasFrequentes.push({ texto, frequencia: 1 });
+        }
+      });
+
+      // Mantém apenas as top 5 dúvidas
+      duvidasFrequentes = duvidasFrequentes
+        .sort((a, b) => b.frequencia - a.frequencia)
+        .slice(0, 5);
+
+      // Calcula novo tempo médio
+      const novoTotal = historico.total_atendimentos + 1;
+      const novoTempoMedio =
+        (historico.tempo_medio_atendimento * historico.total_atendimentos +
+          tempoAtendimento) /
+        novoTotal;
+
+      db.run(
+        `UPDATE historico_clientes 
+         SET total_atendimentos = ?,
+             tempo_medio_atendimento = ?,
+             duvidas_frequentes = ?,
+             atendimentos_mes = atendimentos_mes + 1,
+             ultima_interacao = CURRENT_TIMESTAMP,
+             atualizado_em = CURRENT_TIMESTAMP
+         WHERE telefone = ?`,
+        [novoTotal, novoTempoMedio, JSON.stringify(duvidasFrequentes), chamado.telefone],
+        function(err) {
+          if (err) reject(err);
+          else resolve({ sucesso: true, novoTotal, novoTempoMedio });
+        }
+      );
+
+      // Registra estatística diária
+      const hoje = new Date().toISOString().split('T')[0];
+      db.run(
+        `INSERT INTO estatisticas_diarias (telefone, data, total_atendimentos, tempo_total_minutos)
+         VALUES (?, ?, 1, ?)
+         ON CONFLICT(telefone, data) DO UPDATE SET
+         total_atendimentos = total_atendimentos + 1,
+         tempo_total_minutos = tempo_total_minutos + ?`,
+        [chamado.telefone, hoje, tempoAtendimento, tempoAtendimento],
+        (err) => {
+          if (err) console.error('Erro ao registrar estatística diária:', err);
+        }
+      );
+    } catch (err) {
+      reject(err);
+    }
+  });
+}
+
+// Obter estatísticas de um mês específico
+function obterEstatisticasMes(telefone, ano, mes) {
+  return new Promise((resolve, reject) => {
+    const mesStr = String(mes).padStart(2, '0');
+    const anoStr = String(ano);
+    const pattern = `${anoStr}-${mesStr}%`;
+
+    db.all(
+      `SELECT * FROM estatisticas_diarias 
+       WHERE telefone = ? AND data LIKE ?
+       ORDER BY data ASC`,
+      [telefone, pattern],
+      (err, rows) => {
+        if (err) reject(err);
+        else {
+          const stats = {
+            total_dias_com_atendimento: rows.length,
+            total_atendimentos: rows.reduce((sum, r) => sum + r.total_atendimentos, 0),
+            tempo_total_minutos: rows.reduce((sum, r) => sum + r.tempo_total_minutos, 0),
+            dias: rows,
+          };
+          resolve(stats);
+        }
+      }
+    );
+  });
+}
+
+// Obter todos os clientes com histórico
+function obterTodosClientes() {
+  return new Promise((resolve, reject) => {
+    db.all(
+      `SELECT id, telefone, nome_cliente, total_atendimentos, 
+              tempo_medio_atendimento, atendimentos_mes, ultima_interacao 
+       FROM historico_clientes 
+       ORDER BY ultima_interacao DESC`,
+      (err, rows) => {
+        if (err) reject(err);
+        else resolve(rows || []);
+      }
+    );
+  });
+}
+
+// ==========================
+// EXPORTAR MÓDULO
+// ==========================
 module.exports = {
   db,
   criarChamado,
@@ -300,5 +553,10 @@ module.exports = {
   obterManuaisPorSistema,
   buscarManuaisPorPalavrasChave,
   atualizarManual,
-  deletarManual
+  deletarManual,
+  obterOuCriarHistoricoCliente,
+  obterHistoricoCliente,
+  atualizarHistoricoAposFinalizacao,
+  obterEstatisticasMes,
+  obterTodosClientes
 };

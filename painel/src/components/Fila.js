@@ -23,11 +23,11 @@ export default function Fila({ fila, chamadoAtual, onSelect }) {
               onClick={() => onSelect(chamado)}
             >
               <div className="fila-item-header">
-                <strong>{chamado.cliente.nome}</strong>
+                <strong>{chamado.cliente?.nome ?? "Cliente desconhecido"}</strong>
                 <span className="status-label">{chamado.status}</span>
               </div>
               <div className="fila-item-body">
-                <div>📱 {chamado.cliente.telefone}</div>
+                <div>📱 {chamado.cliente?.telefone ?? "-"}</div>
                 <div>🏢 {chamado.sistema}</div>
                 <div className="origem-badge">
                   {chamado.origem === "whatsapp" ? "💬" : "🌐"} {chamado.origem}

@@ -1,0 +1,203 @@
+.lista-clientes {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  overflow-y: auto;
+}
+
+.lista-header {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.lista-header h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 24px;
+}
+
+.filtro-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  transition: border-color 0.3s;
+}
+
+.filtro-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-atualizar {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+  width: 100%;
+}
+
+.btn-atualizar:hover {
+  background: #764ba2;
+}
+
+.sem-clientes {
+  background: white;
+  border-radius: 10px;
+  padding: 40px 20px;
+  text-align: center;
+  color: #999;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.clientes-table {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  overflow: auto;
+}
+
+.clientes-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.clientes-table thead {
+  background: #f5f5f5;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.clientes-table th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #e0e0e0;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+.clientes-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #666;
+  font-size: 14px;
+}
+
+.clientes-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.clientes-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.cliente-nome {
+  font-weight: 500;
+  color: #333;
+}
+
+.telefone-codigo {
+  background: #f5f5f5;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #666;
+}
+
+.numero {
+  text-align: center;
+  font-weight: 500;
+  color: #667eea;
+}
+
+.tempo-relativo {
+  color: #999;
+  font-size: 13px;
+}
+
+.btn-ver-historico {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background 0.3s;
+  white-space: nowrap;
+}
+
+.btn-ver-historico:hover {
+  background: #764ba2;
+}
+
+.lista-footer {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  text-align: center;
+  color: #666;
+  font-size: 14px;
+}
+
+.lista-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .lista-clientes {
+    padding: 10px;
+  }
+
+  .clientes-table table {
+    font-size: 12px;
+  }
+
+  .clientes-table th,
+  .clientes-table td {
+    padding: 8px 10px;
+  }
+
+  .btn-ver-historico {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  .lista-header h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .filtro-input {
+    margin-bottom: 8px;
+  }
+}

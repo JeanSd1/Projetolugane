@@ -31,8 +31,8 @@ export default function Chat({
     <div className="chat">
       <div className="chat-header">
         <div className="chat-header-info">
-          <h2>{chamado.cliente.nome}</h2>
-          <p>{chamado.cliente.telefone} • {chamado.sistema}</p>
+          <h2>{chamado.cliente?.nome ?? "Cliente desconhecido"}</h2>
+          <p>{chamado.cliente?.telefone ?? "-"} • {chamado.sistema}</p>
         </div>
         <div className="chat-header-actions">
           <button
