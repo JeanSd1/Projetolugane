@@ -25,7 +25,7 @@ Sistema completo de gerenciamento de fila de chamados com chat em tempo real, m�
 
 ### 1. Instalar Dependências
 ```bash
-cd backend && npm install && cd ..
+npm install
 cd painel && npm install && cd ..
 ```
 
@@ -41,19 +41,29 @@ export PUBLICAI_API_URL="https://api.publicai.co" # opcional
 
 ### 2. Rodar Backend (Terminal 1)
 ```bash
-cd backend && npm start
+npm start
 ```
+
+> O backend roda por padrão na porta `3001` (ou na porta definida em `PORT`).
 
 ### 3. Rodar Painel (Terminal 2)
 ```bash
 cd painel && npm start
 ```
 
+> Opcional: para apontar o painel para outro backend, defina `REACT_APP_API_URL` (ex.: `http://localhost:3001`).
+
+### 4. Gerar gráficos da análise (Python)
+```bash
+pip install -r requirements-analise.txt
+python3 gerar-graficos.py
+```
+
 ## 🔧 API Endpoints
 
 ### POST `/chamado` - Criar Chamado
 ```bash
-curl -X POST http://localhost:3000/chamado \
+curl -X POST http://localhost:3001/chamado \
   -H "Content-Type: application/json" \
   -d '{
     "nome": "João",
@@ -65,14 +75,14 @@ curl -X POST http://localhost:3000/chamado \
 
 ### POST `/atendente/disponivel` - Atendente Disponível
 ```bash
-curl -X POST http://localhost:3000/atendente/disponivel \
+curl -X POST http://localhost:3001/atendente/disponivel \
   -H "Content-Type: application/json" \
   -d '{"atendenteId": "atendente-1"}'
 ```
 
 ### POST `/finalizar` - Finalizar Atendimento
 ```bash
-curl -X POST http://localhost:3000/finalizar \
+curl -X POST http://localhost:3001/finalizar \
   -H "Content-Type: application/json" \
   -d '{
     "chamadoId": "ID-DO-CHAMADO",
@@ -82,12 +92,12 @@ curl -X POST http://localhost:3000/finalizar \
 
 ### GET `/metricas` - Obter Métricas
 ```bash
-curl http://localhost:3000/metricas
+curl http://localhost:3001/metricas
 ```
 
 ### POST `/manuais/secao` - Cadastrar seção de manual
 ```bash
-curl -X POST http://localhost:3000/manuais/secao \
+curl -X POST http://localhost:3001/manuais/secao \
   -H "Content-Type: application/json" \
   -d '{
     "sistema": "RHD",
@@ -100,7 +110,7 @@ curl -X POST http://localhost:3000/manuais/secao \
 
 ### POST `/manuais/sugerir` - Buscar seção ideal do manual
 ```bash
-curl -X POST http://localhost:3000/manuais/sugerir \
+curl -X POST http://localhost:3001/manuais/sugerir \
   -H "Content-Type: application/json" \
   -d '{
     "sistema": "RHD",
@@ -111,12 +121,12 @@ curl -X POST http://localhost:3000/manuais/sugerir \
 
 ### GET `/integracoes/publicai/status` - Verificar integração PublicAI
 ```bash
-curl http://localhost:3000/integracoes/publicai/status
+curl http://localhost:3001/integracoes/publicai/status
 ```
 
 ### POST `/integracoes/publicai/responder` - Resposta segura (somente após "oi")
 ```bash
-curl -X POST http://localhost:3000/integracoes/publicai/responder \
+curl -X POST http://localhost:3001/integracoes/publicai/responder \
   -H "Content-Type: application/json" \
   -d '{
     "telefone": "51999999999",
@@ -158,6 +168,5 @@ Regras de segurança implementadas:
 - [ ] Autenticação
 - [ ] Notificações
 
----
 
-**Desenvolvido com ❤️**
+
